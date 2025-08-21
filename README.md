@@ -65,6 +65,21 @@ On the first run, the app automatically creates the following default users if t
 > These accounts are stored in the SQLite database (`database.db`).
 > Passwords are stored in plaintext for lab purposes — **do not use in production**.
 
+## Revoke Admin Rights from a User
+
+If you promoted a non-admin user to admin and want to make them non-admin again, run the following command:
+
+```bash
+sqlite3 database.db "UPDATE users SET is_admin = 0 WHERE id = 2;"
+```
+
+> Replace `2` with the actual user ID you want to demote.  
+> Then restart the app with:
+
+```bash
+node app.js
+```
+
 ---
 
 ## What You Can Do in This Lab
