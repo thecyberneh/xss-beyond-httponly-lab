@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+        // Store CSRF token in local storage
+        localStorage.setItem('csrfToken', '<%= csrfToken %>');
+    </script>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Welcome, Admin <%= user.username %>!</h1>
+        
+        <div class="admin-section">
+            <h2>All Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Profile Pic</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.id %></td>
+                            <td><%= user.username %></td>
+                            <td><%= user.is_admin ? 'Admin' : 'User' %></td>
+                            <td>
+                                <% if (user.profile_pic) { %>
+                                    <a href="/profile/<%= user.id %>" target="_blank">View</a>
+                                <% } else { %>
+                                    None
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (!user.is_admin) { %>
+                                    <form class="promote-form" onsubmit="return promoteUser(event, <%= user.id %>)">
+                                        <button type="submit">Make Admin</button>
+                                    </form>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+
+    <script>
+    function promoteUser(event, userId) {
+        event.preventDefault();
+        const csrfToken = localStorage.getItem('csrfToken');
+        
+        fetch('/promote-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-Token': csrfToken
+            },
+            body: `user_id=${userId}`
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+        
+        return false;
+    }
+    </script>
+</body>
+</html>

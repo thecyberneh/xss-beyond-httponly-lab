@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+        localStorage.setItem('csrfToken', '<%= csrfToken %>');
+    </script>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Welcome, <%= user.username %>!</h1>
+        <p>You are a normal user.</p>
+        
+        <div class="profile-section">
+            <h2>Update Profile Picture</h2>
+            <form id="profileForm" enctype="multipart/form-data">
+                <input type="file" id="profilePic" name="profile_pic" accept=".svg,.jpg,.jpeg,.png">
+                <button type="button" onclick="uploadProfile()">Update</button>
+            </form>
+            
+            <% if (user.profile_pic) { %>
+                <div class="profile-pic-container">
+                    <h3>Your Profile Picture:</h3>
+                    <div class="profile-pic">
+                        <%- user.profile_pic %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+        
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+    
+    <script>
+    function uploadProfile() {
+        const fileInput = document.getElementById('profilePic');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            alert('Please select a file');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const fileContent = e.target.result;
+            
+            fetch('/update-profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRF-Token': localStorage.getItem('csrfToken')
+                },
+                body: `profile_pic=${encodeURIComponent(fileContent)}`
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        };
+        
+        reader.readAsText(file);
+    }
+    </script>
+</body>
+</html>

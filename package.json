@@ -1,0 +1,17 @@
+{
+    "name": "web-pentesting-lab",
+    "version": "1.0.0",
+    "description": "A lab for practicing web penetration testing",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "body-parser": "^1.20.3",
+        "crypto": "^1.0.1",
+        "ejs": "^3.1.10",
+        "express": "^4.21.2",
+        "express-session": "^1.18.2",
+        "sqlite3": "^5.1.7"
+    }
+}

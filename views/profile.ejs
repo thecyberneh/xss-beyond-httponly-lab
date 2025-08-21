@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= viewedUser.username %>'s Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="profile-container">
+        <h1><%= viewedUser.username %>'s Profile</h1>
+        
+        <% if (viewedUser.profile_pic) { %>
+            <div class="profile-pic">
+                <h2>Profile Picture:</h2>
+                <div class="svg-container">
+                    ${viewedUser.profile_pic}
+                  </div>
+            </div>
+        <% } else { %>
+            <p>No profile picture set.</p>
+        <% } %>
+        
+        <% if (currentUser.is_admin) { %>
+            <a href="/admin">Back to Admin Dashboard</a>
+        <% } else { %>
+            <a href="/user">Back to Dashboard</a>
+        <% } %>
+    </div>
+</body>
+</html>
