@@ -55,7 +55,15 @@ node app.js
 
 Open your browser at [http://localhost:3000](http://localhost:3000)
 
-**Note:** On the first run, the admin password is randomly generated and shown in your console.
+On the first run, the app automatically creates the following default users if they don’t already exist:
+
+| Role         | Username | Password |
+|--------------|----------|----------|
+| Admin        | admin    | admin    |
+| Regular User | user     | pass     |
+
+> These accounts are stored in the SQLite database (`database.db`).
+> Passwords are stored in plaintext for lab purposes — **do not use in production**.
 
 ---
 

@@ -23,19 +23,42 @@ db.serialize(() => {
             profile_pic TEXT
         )
     `);
-    
+
     // Add initial admin user if none exists
     db.get("SELECT * FROM users WHERE is_admin = 1", (err, row) => {
         if (!row) {
-            const adminPassword = crypto.randomBytes(8).toString('hex');
             db.run(
                 "INSERT INTO users (username, password, is_admin) VALUES (?, ?, 1)",
-                ["admin", adminPassword]
+                ["admin", "admin"],
+                (err) => {
+                    if (err) {
+                        console.error("Error creating admin user:", err.message);
+                    } else {
+                        console.log("Admin user created: username = 'admin', password = 'admin'");
+                    }
+                }
             );
-            console.log(`Admin created with password: ${adminPassword}`);
+        }
+    });
+
+    // Add default non-admin user if it doesn't exist
+    db.get("SELECT * FROM users WHERE username = 'user'", (err, row) => {
+        if (!row) {
+            db.run(
+                "INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)",
+                ["user", "pass"],
+                (err) => {
+                    if (err) {
+                        console.error("Error creating default user:", err.message);
+                    } else {
+                        console.log("Default user created: username = 'user', password = 'pass'");
+                    }
+                }
+            );
         }
     });
 });
+
 
 // Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
