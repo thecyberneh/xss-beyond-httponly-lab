@@ -42,7 +42,7 @@ Many pentesters dismiss XSS with `HttpOnly` cookies as low impact because cookie
 ## How to Run This Lab Locally
 
 ```bash
-git clone https://github.com/yourusername/xss-beyond-httponly-lab.git
+git clone https://github.com/thecyberneh/xss-beyond-httponly-lab.git
 cd xss-beyond-httponly-lab
 npm install
 ```
